@@ -16,6 +16,8 @@ function createRow(container,studentName,samples){
         const sampleContainer=document.createElement('div');
         sampleContainer.id="sample_" + id;
 
+        // a anonymous method with ()=> is bound as event handler to the to the sampleContainer element, it will be called the first time when the element gets clicked
+        // second attribute is false: means that when clicking the container directly there is no scrolling
         sampleContainer.onclick=()=>handleClick(sample,false);
 
         //with classList.add() we add an css class to an HTML document
@@ -67,4 +69,16 @@ function handleClick(sample, doScroll=true){
         });
     }    
     chart.selectSample(sample);
+}
+
+function toggleInput(){
+    if(inputContainer.style.display=="none"){
+        //block: occupy the full space available
+        inputContainer.style.display="block";
+        sketchPad.triggerUpdate();
+    }else{
+        //none: don't display anything
+        inputContainer.style.display="none";
+        chart.hideDynamicPoint();
+    }
 }

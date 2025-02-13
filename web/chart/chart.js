@@ -44,17 +44,26 @@ class Chart{
 
       this.#addEventListeners();
    }
-
+   
    showDynamicPoint(point,label,nearestSample){
       this.dynamicPoint={point,label};
       this.nearestSample=nearestSample;
       this.#draw();
    }
 
+   /*
+   hideDynamicPoint(point){
+      this.dynamicPoint=point;
+      this.#draw(); 
+   }
+   */
+
    hideDynamicPoint(){
       this.dynamicPoint=null;
-      this.#draw();
+      this.#draw(); 
    }
+
+ 
 
    #addEventListeners(){
       const {canvas,dataTrans,dragInfo}=this;
@@ -253,27 +262,48 @@ class Chart{
          );
       }
 
+      
       if(this.dynamicPoint){
          const {point,label}=this.dynamicPoint;
+         //console.log('definition of dynamic point seems to worked out');
          const pixelLoc=math.remapPoint(
             this.dataBounds,
             this.pixelBounds,
             point
          );
-         graphics.drawPoint(ctx,pixelLoc,"rgba(255,255,255,0.7)",10000000);
+         //graphics.drawPoint(ctx,pixelLoc,"rgba(0, 0, 0, 1)",10);
+         graphics.drawPoint(ctx,pixelLoc,'rgba(255,255,255,0.4)',10000000);
+         graphics.drawPoint(ctx,pixelLoc);
+
          ctx.beginPath();
          ctx.moveTo(...pixelLoc);
-         ctx.lineTo(...math.remapPoint(
+
+         if(this.nearestSample){
+            ctx.lineTo(...math.remapPoint(
+               this.dataBounds,
+               this.pixelBounds,
+               this.nearestSample.point
+            ));
+         }
+         
+         ctx.stroke();
+         if (this.styles[label] && this.styles[label].image) {
+            graphics.drawImage(ctx, this.styles[label].image, pixelLoc);
+         }
+
+      }      
+      
+     /*
+      if(this.dynamicPoint){
+         const pixelLoc=math.remapPoint(
             this.dataBounds,
             this.pixelBounds,
-            this.nearestSample.point
-         ));
-         ctx.stroke();
-         graphics.drawImage(ctx,
-            this.styles[label].image,
-            pixelLoc
-         );
+            this.dynamicPoint            
+         )
+         console.log('we got a dynamic point');
+         graphics.drawPoint(ctx,pixelLoc,"rgba(255,255,255,0.7)",10000000);
       }
+      */      
 
       this.#drawAxes();
    }

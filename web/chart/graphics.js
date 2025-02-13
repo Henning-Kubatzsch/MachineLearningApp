@@ -5,6 +5,7 @@ graphics.drawPoint=(ctx,loc,color="black",size=8)=>{
    ctx.fillStyle=color;
    ctx.arc(...loc,size/2,0,Math.PI*2);
    ctx.fill();
+   //console.log("point should be drawn... :(")
 }
 
 graphics.drawText=(ctx,
